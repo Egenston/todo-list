@@ -1,0 +1,16 @@
+.todo-card{
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    @apply relative w-full min-h-[300px] p-4 border border-white/[.33] backdrop-blur-[10.6px] rounded-[16px] bg-white/[.36] dark:bg-white/[.1] dark:border-none;
+}
+.todo-card-inputs{
+    @apply w-full grid grid-cols-12 gap-4;
+}
+.todo-card-input{
+    @apply disabled:bg-transparent;
+}
+.todo-card-all-buttons{
+    @apply absolute top-4 right-4 flex justify-center items-center;
+}
+.todo-card-operational-buttons{
+    @apply absolute flex flex-col justify-center items-center gap-y-4 transition-all top-full pt-4;
+}
