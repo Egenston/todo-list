@@ -1,42 +1,37 @@
 import { Injectable } from '@angular/core';
 import { ISingleTodo } from '../interfaces/single-todo.interface';
 import { Observable, of } from 'rxjs';
+import { UUID } from 'angular2-uuid';
 @Injectable({
   providedIn: 'root'
 })
 export class LoadTodoService {
   
   getAllTodos(): Observable<ISingleTodo[]>{
-    const todos = of(this.todos);
-    return todos;
+    return of(this.todos);
   }
 
-  getTodo(id: number){
-    return this.todos.filter(todo => todo.id == id);
-  }
-
-  addTodo(todo: ISingleTodo){
-    this.todos.push(todo);
+  addTodo(){
+    this.todos.push({
+      id: UUID.UUID(),
+      name: "",
+      description: "",
+      priority: "Normal",
+      doneStatus: false
+    });
+    this.syncDatabase();
   }
 
   deleteTodo(currentTodo: ISingleTodo){
     this.todos = this.todos.filter(todo => todo.id !== currentTodo.id);
+    this.syncDatabase()  
   }
-  
-  todos: ISingleTodo[] = [
-    { 
-      id: 0,
-      name: "go to school",
-      description: "learn",
-      priority: "important"
-    },
-    { 
-      id: 1,
-      name: "training",
-      description: "hit the gym",
-      priority: "optional"
-    }
-  ]
-  
+
+  syncDatabase(){
+    localStorage.setItem("todos", JSON.stringify(this.todos));
+  }
+
+  todos: ISingleTodo[] = localStorage.getItem("todos") ? JSON.parse(localStorage.getItem("todos")!) : [];
+
   constructor() { }
 }

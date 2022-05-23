@@ -1,0 +1,10 @@
+.header{
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    @apply relative w-full h-[50px] p-4 border border-t-0 border-white/[.33] backdrop-blur-[10.6px] rounded-b-[16px] bg-white/[.36] dark:bg-white/[.1] dark:border-none overflow-clip flex justify-between items-center;
+}
+.header-right-part{
+    @apply flex justify-center items-center;
+    svg{
+        @apply cursor-pointer;
+    }
+}

@@ -1,16 +1,39 @@
 .todo-card{
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    @apply relative w-full min-h-[300px] p-4 border border-white/[.33] backdrop-blur-[10.6px] rounded-[16px] bg-white/[.36] dark:bg-white/[.1] dark:border-none;
+    @apply relative w-full min-h-[300px] p-4 border border-white/[.33] backdrop-blur-[10.6px] rounded-[16px] bg-white/[.36] dark:bg-white/[.1] dark:border-none overflow-clip;
 }
 .todo-card-inputs{
     @apply w-full grid grid-cols-12 gap-4;
 }
 .todo-card-input{
-    @apply disabled:bg-transparent;
+    @apply bg-transparent border rounded-md border-neutral-300 p-2 outline-none text-dark placeholder-dark disabled:border-transparent;
+}
+.priority-select{
+    @apply flex justify-start items-center col-start-1 col-span-2 text-xl text-dark;
 }
 .todo-card-all-buttons{
     @apply absolute top-4 right-4 flex justify-center items-center;
 }
-.todo-card-operational-buttons{
-    @apply absolute flex flex-col justify-center items-center gap-y-4 transition-all top-full pt-4;
+.todo-card-opened-menu{
+    @apply flex flex-col justify-center items-center gap-y-4 transition-all;
 }
+.todo-card-done{
+    @apply absolute w-full h-full flex justify-center items-center bg-green-500/75 top-0 left-0;
+}
+.operational-button{
+    @apply fill-dark bg-transparent rounded-full transition-all cursor-pointer;
+
+    &.edit-button{
+        @apply p-1 hover:bg-blue-200;
+        &.edit-enabled{
+            @apply bg-blue-200;
+        }
+    }
+    &.delete-button{
+        @apply hover:bg-red-200 p-2 overflow-visible;
+    }
+    &.done-button{
+        @apply hover:bg-green-200 p-2;
+    }
+}
+

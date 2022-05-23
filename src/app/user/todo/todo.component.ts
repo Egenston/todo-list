@@ -7,7 +7,7 @@ import { LoadTodoService } from 'src/app/services/load-todo.service';
   templateUrl: './todo.component.html',
   styleUrls: ['./todo.component.scss']
 })
-export class TodoComponent {
+export class TodoComponent{
    
   @Input()
   todo!: ISingleTodo;
@@ -22,6 +22,7 @@ export class TodoComponent {
   toggleEdit(): void{
     this.inputIsDisabled = !this.inputIsDisabled;
   }
+
   toggleMenuState(): void{
     this.menuOpened = !this.menuOpened;
     this.inputIsDisabled = true;
@@ -29,5 +30,16 @@ export class TodoComponent {
 
   deleteTodo(): void{
     this.loadTodoService.deleteTodo(this.todo);
+  }
+
+  toggleDoneStatus(): void{
+    this.todo.doneStatus = !this.todo.doneStatus;
+    this.menuOpened = false;
+    this.inputIsDisabled = true;
+    this.updateDatabase();
+  }
+
+  updateDatabase(): void{
+    this.loadTodoService.syncDatabase();
   }
 }

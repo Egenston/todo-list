@@ -1,35 +1,23 @@
-import { Component, OnInit } from '@angular/core';
-import { ISingleTodo } from 'src/app/interfaces/single-todo.interface';
+import { Component } from '@angular/core';
 import { LoadTodoService } from 'src/app/services/load-todo.service';
-import { Observable, of } from 'rxjs';
-
 
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.scss']
 })
-export class UserComponent implements OnInit {
+export class UserComponent{
 
-  todos: ISingleTodo[] = [];
-  
-  getTodos(): void {
-    this.userService.getAllTodos().subscribe(returnedTodos => this.todos = returnedTodos);
+  get todos() {
+    return this.loadTodoService.getAllTodos();
   }
-  // public todos$?: Observable<ISingleTodo[]>;
-  // currentTodos$?: Observable<ISingleTodo[]>;
+
+  addTodo(): void{
+    this.loadTodoService.addTodo();
+  }
+
   constructor(
-    private userService: LoadTodoService
+    private loadTodoService: LoadTodoService
   ) { }
-
-  // deleteTodo(currentTodo: ISingleTodo): void{
-  //   this.todos = this.todos.filter(todo => todo.id !== currentTodo.id);
-  // }
-
-  // getTodos$: Observable<ISingleTodo[]> = of(this.todos);
-  
-  ngOnInit(): void {
-    this.getTodos();
-  }
 
 }

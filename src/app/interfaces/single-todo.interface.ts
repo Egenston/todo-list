@@ -1,6 +1,7 @@
 export interface ISingleTodo{
-    id: number;
+    id: string;
     name: string;
     description: string;
     priority: string;
+    doneStatus: boolean;
 }

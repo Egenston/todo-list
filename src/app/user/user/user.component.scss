@@ -1,0 +1,28 @@
+.todos-list{
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-12 mt-16;
+}
+.add-todo-card{
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    @apply relative w-full min-h-[300px] p-4 border border-white/[.33] backdrop-blur-[10.6px] rounded-[16px] bg-white/[.36]  flex flex-col justify-center items-center cursor-pointer;
+    &:hover{
+        svg{
+            @apply fill-black scale-110;
+        }
+    }
+}
+.example-form {
+    min-width: 150px;
+    max-width: 500px;
+    width: 100%;
+  }
+  
+  .example-full-width {
+    width: 100%;
+  }
+  
+  td {
+    padding-right: 8px;
+  }
+::ng-deep .example-full-width{
+    background-color: aqua;
+}

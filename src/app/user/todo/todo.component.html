@@ -1,41 +1,45 @@
 <div class="todo-card">
     <div class="todo-card-inputs">
-        <input type="text" [(ngModel)]="todo.name" placeholder="Enter todo name" name="name"
-            class="col-span-10 todo-card-input text-5xl" [disabled]="inputIsDisabled" />
-        <textarea name="description" placeholder="Enter todo description" [(ngModel)]="todo.description"
-            class="col-span-10 todo-card-input text-2xl resize-none" [disabled]="inputIsDisabled">
-            {{todo.description}}
-        </textarea>
-        <select name="priority" [(ngModel)]="todo.priority" class="col-start-1 col-span-2 todo-card-input text-2xl"
+        <input type="text" [(ngModel)]="todo.name" (input)="updateDatabase()" placeholder="Todo name" name="name"
+            class="col-span-10 todo-card-input text-4xl disabled:overflow-hidden disabled:text-ellipsis" [disabled]="inputIsDisabled" />
+        <textarea name="description" rows="4" placeholder="Todo description" [(ngModel)]="todo.description" (input)="updateDatabase()" class="col-span-10 todo-card-input text-xl resize-none scrollbar-thin scrollbar-thumb-neutral-300"
             [disabled]="inputIsDisabled">
-            <option *ngFor="let priorityValue of priorityValues" [value]="priorityValue">{{priorityValue}}</option>
-        </select>
+        </textarea>
+        <div class="priority-select">
+            <p class="dark:text-light">Priority: </p>
+            <select name="priority" [(ngModel)]="todo.priority" (change)="updateDatabase()"
+                [class]="inputIsDisabled ? 'todo-card-input appearance-none' : 'todo-card-input'" [disabled]="inputIsDisabled">
+                <option *ngFor="let priorityValue of priorityValues" [value]="priorityValue">{{priorityValue}}</option>
+            </select>
+        </div>
     </div>
     <div class="todo-card-all-buttons">
         <!-- open menu button -->
-        <svg *ngIf="!menuOpened" fill="none" height="48" viewBox="0 0 24 24" width="48" xmlns="http://www.w3.org/2000/svg"
-            class="stroke-neutral-400 hover:stroke-neutral-200 cursor-pointer" (click)="toggleMenuState()">
+        <svg *ngIf="!menuOpened && !todo.doneStatus" fill="none" height="48" viewBox="0 0 24 24" width="48"
+            xmlns="http://www.w3.org/2000/svg" class="stroke-dark bg-transparent hover:bg-light rounded-full cursor-pointer p-1"
+            (click)="toggleMenuState()">
             <path
                 d="M12 5L12 5.01M12 12L12 12.01M12 19L12 19.01M12 6C11.4477 6 11 5.55228 11 5C11 4.44772 11.4477 4 12 4C12.5523 4 13 4.44772 13 5C13 5.55228 12.5523 6 12 6ZM12 13C11.4477 13 11 12.5523 11 12C11 11.4477 11.4477 11 12 11C12.5523 11 13 11.4477 13 12C13 12.5523 12.5523 13 12 13ZM12 20C11.4477 20 11 19.5523 11 19C11 18.4477 11.4477 18 12 18C12.5523 18 13 18.4477 13 19C13 19.5523 12.5523 20 12 20Z"
                 stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
         </svg>
-        <!-- close menu button -->
-        <svg *ngIf="menuOpened" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" width="48px" height="48px" class="fill-neutral-400 hover:fill-neutral-200 cursor-pointer" (click)="toggleMenuState()">
-            <path
-                d="M 9.15625 6.3125 L 6.3125 9.15625 L 22.15625 25 L 6.21875 40.96875 L 9.03125 43.78125 L 25 27.84375 L 40.9375 43.78125 L 43.78125 40.9375 L 27.84375 25 L 43.6875 9.15625 L 40.84375 6.3125 L 25 22.15625 Z" />
-        </svg>
-        <!-- operational buttons -->
-        <div *ngIf="menuOpened" class="todo-card-operational-buttons">
+        <!-- opened menu -->
+        <div *ngIf="menuOpened" class="todo-card-opened-menu">
+            <!-- close menu button -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" width="48px" height="48px"
+                class="fill-dark bg-transparent hover:bg-light rounded-full p-2 cursor-pointer" (click)="toggleMenuState()">
+                <path
+                    d="M 9.15625 6.3125 L 6.3125 9.15625 L 22.15625 25 L 6.21875 40.96875 L 9.03125 43.78125 L 25 27.84375 L 40.9375 43.78125 L 43.78125 40.9375 L 27.84375 25 L 43.6875 9.15625 L 40.84375 6.3125 L 25 22.15625 Z" />
+            </svg>
             <!-- edit button -->
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="44px" height="44px"
-                (click)="toggleEdit()" class="fill-neutral-200 hover:fill-blue-300 cursor-pointer">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48px" height="48px"
+                (click)="toggleEdit()" [class]="inputIsDisabled ? 'operational-button edit-button' : 'operational-button edit-button edit-enabled'">
                 <path
                     d="M 18.414062 2 C 18.158062 2 17.902031 2.0979687 17.707031 2.2929688 L 15.707031 4.2929688 L 14.292969 5.7070312 L 3 17 L 3 21 L 7 21 L 21.707031 6.2929688 C 22.098031 5.9019687 22.098031 5.2689063 21.707031 4.8789062 L 19.121094 2.2929688 C 18.926094 2.0979687 18.670063 2 18.414062 2 z M 18.414062 4.4140625 L 19.585938 5.5859375 L 18.292969 6.8789062 L 17.121094 5.7070312 L 18.414062 4.4140625 z M 15.707031 7.1210938 L 16.878906 8.2929688 L 6.171875 19 L 5 19 L 5 17.828125 L 15.707031 7.1210938 z" />
             </svg>
             <!-- delete button -->
-            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="42"
-                height="42" viewBox="0 0 256 256" xml:space="preserve"
-                class="fill-neutral-200 hover:fill-red-500 cursor-pointer" (click)="deleteTodo()">
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="48"
+                height="48" viewBox="0 0 256 256" xml:space="preserve"
+                class="operational-button delete-button" (click)="deleteTodo()">
                 <defs>
                 </defs>
                 <g transform="translate(128 128) scale(0.72 0.72)" style="">
@@ -54,9 +58,9 @@
             </svg>
             <!-- "mark as done" button -->
             <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                x="0px" y="0px" width="42" height="42" viewBox="0 0 305.002 305.002"
+                x="0px" y="0px" width="48" height="48" viewBox="0 0 305.002 305.002"
                 style="enable-background:new 0 0 305.002 305.002;" xml:space="preserve"
-                class="fill-neutral-200 hover:fill-green-500 cursor-pointer">
+                class="operational-button done-button" (click)="toggleDoneStatus()">
                 <g>
                     <g>
                         <path d="M152.502,0.001C68.412,0.001,0,68.412,0,152.501s68.412,152.5,152.502,152.5c84.089,0,152.5-68.411,152.5-152.5
@@ -70,5 +74,42 @@
 
             </svg>
         </div>
+    </div>
+    <div *ngIf="todo.doneStatus" class="todo-card-done">
+        <!-- toggle done status -->
+        <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+            x="0px" y="0px" width="100" height="100" viewBox="0 0 305.002 305.002"
+            style="enable-background:new 0 0 305.002 305.002;" xml:space="preserve" class="fill-light hover:scale-110 hover:fill-white transition-all cursor-pointer" (click)="toggleDoneStatus();">
+            <g>
+                <g>
+                    <path d="M152.502,0.001C68.412,0.001,0,68.412,0,152.501s68.412,152.5,152.502,152.5c84.089,0,152.5-68.411,152.5-152.5
+        S236.591,0.001,152.502,0.001z M152.502,280.001C82.197,280.001,25,222.806,25,152.501c0-70.304,57.197-127.5,127.502-127.5
+        c70.304,0,127.5,57.196,127.5,127.5C280.002,222.806,222.806,280.001,152.502,280.001z" />
+                    <path d="M218.473,93.97l-90.546,90.547l-41.398-41.398c-4.882-4.881-12.796-4.881-17.678,0c-4.881,4.882-4.881,12.796,0,17.678
+        l50.237,50.237c2.441,2.44,5.64,3.661,8.839,3.661c3.199,0,6.398-1.221,8.839-3.661l99.385-99.385
+        c4.881-4.882,4.881-12.796,0-17.678C231.269,89.089,223.354,89.089,218.473,93.97z" />
+                </g>
+            </g>
+        </svg>
+        <!-- delete done todo -->
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="42"
+                height="42" viewBox="0 0 256 256" xml:space="preserve"
+                class="absolute top-4 right-4 fill-light hover:fill-white cursor-pointer" (click)="deleteTodo()">
+            <defs>
+            </defs>
+            <g transform="translate(128 128) scale(0.72 0.72)" style="">
+                <g style="stroke: none; stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill-rule: nonzero; opacity: 1;"
+                    transform="translate(-175.05 -175.05000000000004) scale(3.89 3.89)">
+                    <path
+                        d="M 76.777 2.881 H 57.333 V 2.412 C 57.333 1.08 56.253 0 54.921 0 H 35.079 c -1.332 0 -2.412 1.08 -2.412 2.412 v 0.469 H 13.223 c -1.332 0 -2.412 1.08 -2.412 2.412 v 9.526 c 0 1.332 1.08 2.412 2.412 2.412 h 63.554 c 1.332 0 2.412 -1.08 2.412 -2.412 V 5.293 C 79.189 3.961 78.109 2.881 76.777 2.881 z"
+                        style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill-rule: nonzero; opacity: 1;"
+                        transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+                    <path
+                        d="M 73.153 22.119 H 16.847 c -1.332 0 -2.412 1.08 -2.412 2.412 v 63.057 c 0 1.332 1.08 2.412 2.412 2.412 h 56.306 c 1.332 0 2.412 -1.08 2.412 -2.412 V 24.531 C 75.565 23.199 74.485 22.119 73.153 22.119 z M 33.543 81.32 c 0 1.332 -1.08 2.412 -2.412 2.412 h -2.245 c -1.332 0 -2.412 -1.08 -2.412 -2.412 V 30.799 c 0 -1.332 1.08 -2.412 2.412 -2.412 h 2.245 c 1.332 0 2.412 1.08 2.412 2.412 V 81.32 z M 48.535 81.32 c 0 1.332 -1.08 2.412 -2.412 2.412 h -2.245 c -1.332 0 -2.412 -1.08 -2.412 -2.412 V 30.799 c 0 -1.332 1.08 -2.412 2.412 -2.412 h 2.245 c 1.332 0 2.412 1.08 2.412 2.412 V 81.32 z M 63.526 81.32 c 0 1.332 -1.08 2.412 -2.412 2.412 h -2.245 c -1.332 0 -2.412 -1.08 -2.412 -2.412 V 30.799 c 0 -1.332 1.08 -2.412 2.412 -2.412 h 2.245 c 1.332 0 2.412 1.08 2.412 2.412 V 81.32 z"
+                        style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill-rule: nonzero; opacity: 1;"
+                        transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+                </g>
+            </g>
+        </svg>
     </div>
 </div>
